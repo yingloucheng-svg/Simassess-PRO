@@ -451,12 +451,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Reset step states
     steps.forEach((step, idx) => {
+      if (!step) return;
       step.className = "progress-step-item";
+      const bullet = step.querySelector(".step-bullet") || step.querySelector(".step-bullet-dot");
       if (idx === 0) {
         step.classList.add("step-active");
-        step.querySelector(".step-bullet").innerHTML = `<div class="spinner-sm"></div>`;
+        if (bullet) {
+          bullet.innerHTML = `<div class="spinner-sm"></div>`;
+        }
       } else {
-        step.querySelector(".step-bullet-dot") || (step.querySelector(".step-bullet").innerHTML = `<div class="step-bullet-dot"></div>`);
+        if (bullet) {
+          bullet.innerHTML = `<div class="step-bullet-dot"></div>`;
+        }
       }
     });
 
@@ -492,14 +498,22 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function setStepComplete(stepEl) {
+    if (!stepEl) return;
     stepEl.classList.remove("step-active");
     stepEl.classList.add("step-done");
-    stepEl.querySelector(".step-bullet").innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:var(--emerald-600);"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    const bullet = stepEl.querySelector(".step-bullet") || stepEl.querySelector(".step-bullet-dot");
+    if (bullet) {
+      bullet.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:var(--emerald-600);"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+    }
   }
 
   function setStepActive(stepEl) {
+    if (!stepEl) return;
     stepEl.classList.add("step-active");
-    stepEl.querySelector(".step-bullet").innerHTML = `<div class="spinner-sm"></div>`;
+    const bullet = stepEl.querySelector(".step-bullet") || stepEl.querySelector(".step-bullet-dot");
+    if (bullet) {
+      bullet.innerHTML = `<div class="spinner-sm"></div>`;
+    }
   }
 
   // ==========================================================================

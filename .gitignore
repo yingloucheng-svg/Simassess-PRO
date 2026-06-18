@@ -1,0 +1,4 @@
+find_git.js
+get_git.js
+*.log
+.system_generated/

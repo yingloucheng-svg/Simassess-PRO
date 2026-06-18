@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="SimAssess Pro is a premium clinical simulation assessment portal featuring AI-assisted review, chronological findings timeline, patient vitals monitoring, and certified clinical reports.">
+  <title>SimAssess Pro - AI Clinical Simulation Assessment</title>
+  
+  <!-- Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Screen 1: Login Screen -->
+  <div id="screen-login" class="screen active-screen">
+    <div class="login-background">
+      <div class="glow-sphere sphere-1"></div>
+      <div class="glow-sphere sphere-2"></div>
+    </div>
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-header">
+          <div class="brand-logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 10.5V13.5M19 10.5C20.3807 10.5 21.5 11.6193 21.5 13C21.5 14.3807 20.3807 15.5 19 15.5M19 10.5C17.6193 10.5 16.5 11.6193 16.5 13C16.5 14.3807 17.6193 15.5 19 15.5M19 15.5V18.5M12 3V21M12 3C13.3807 3 14.5 4.11929 14.5 5.5C14.5 6.88071 13.3807 8 12 8M12 3C10.6193 3 9.5 4.11929 9.5 5.5C9.5 6.88071 10.6193 8 12 8M12 8V16M12 16C13.3807 16 14.5 17.1193 14.5 18.5C14.5 19.8807 13.3807 21 12 21M12 16C10.6193 16 9.5 17.1193 9.5 18.5C9.5 19.8807 10.6193 21 12 21M5 7.5V10.5M5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5M5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5M5 12.5V15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="brand-text">SimAssess <span class="brand-badge">Pro</span></span>
+          </div>
+          <h1 class="login-title">Clinical AI Assessment Portal</h1>
+          <p class="login-subtitle">Sign in to review and certify simulation protocols</p>
+        </div>
+        
+        <form id="login-form" class="login-form">
+          <div class="input-group">
+            <label for="login-email">Work Email</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 8L10.8906 13.2604C11.5624 13.7083 12.4376 13.7083 13.1094 13.2604L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <input type="email" id="login-email" required value="sarah.jenkins@simcenter.org">
+            </div>
+          </div>
+          
+          <div class="input-group">
+            <label for="login-password">Password</label>
+            <div class="input-wrapper">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 15V17M17 21H7C5.89543 21 5 20.1046 5 19V12C5 10.8954 5.89543 10 7 10H17C18.1046 10 19 10.8954 19 12V19C19 20.1046 18.1046 21 17 21ZM12 6C13.6569 6 15 7.34315 15 9V10H9V9C9 7.34315 10.3431 6 12 6Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <input type="password" id="login-password" required value="••••••••••••">
+            </div>
+          </div>
+          
+          <div class="form-options">
+            <label class="checkbox-container">
+              <input type="checkbox" checked>
+              <span class="checkmark"></span>
+              Remember me
+            </label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+          
+          <button type="submit" id="btn-login" class="btn btn-primary btn-block">
+            <span class="btn-text">Sign In</span>
+            <div class="spinner hidden"></div>
+          </button>
+        </form>
+        
+        <div class="login-footer">
+          <p>SimAssess Pro B2B Enterprise v2.4.1</p>
+          <p class="security-info">Secure medical school & hospital data environment</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Portal Shell (Sidebar + Content Area) -->
+  <div id="portal-shell" class="portal-shell hidden">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 10.5V13.5M19 10.5C20.3807 10.5 21.5 11.6193 21.5 13C21.5 14.3807 20.3807 15.5 19 15.5M19 10.5C17.6193 10.5 16.5 11.6193 16.5 13C16.5 14.3807 17.6193 15.5 19 15.5M19 15.5V18.5M12 3V21M12 3C13.3807 3 14.5 4.11929 14.5 5.5C14.5 6.88071 13.3807 8 12 8M12 3C10.6193 3 9.5 4.11929 9.5 5.5C9.5 6.88071 10.6193 8 12 8M12 8V16M12 16C13.3807 16 14.5 17.1193 14.5 18.5C14.5 19.8807 13.3807 21 12 21M12 16C10.6193 16 9.5 17.1193 9.5 18.5C9.5 19.8807 10.6193 21 12 21M5 7.5V10.5M5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5M5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5M5 12.5V15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="brand-text">SimAssess <span class="brand-badge">Pro</span></span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="#" id="nav-dashboard" class="nav-item active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" id="nav-library" class="nav-item">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20M4 19.5V3A2.5 2.5 0 0 1 6.5 0.5H20v16.5H6.5a2.5 2.5 0 0 0-2.5 2.5z"></path></svg>
+              <span>Assessment Library</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item disabled-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              <span>Student Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item disabled-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>Active Students</span>
+            </a>
+          </li>
+          <li>
+            <a href="#" class="nav-item disabled-link">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              <span>Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-user">
+        <div class="user-avatar">SJ</div>
+        <div class="user-info">
+          <p class="user-name">Dr. Sarah Jenkins</p>
+          <p class="user-role">Clinical Assessor</p>
+        </div>
+        <button id="btn-logout" class="logout-icon" title="Logout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </aside>
+    
+    <!-- Top Header Bar -->
+    <header class="app-header">
+      <div class="header-left">
+        <h2 id="header-page-title">Dashboard</h2>
+      </div>
+      <div class="header-right">
+        <div class="system-time" id="system-time">June 14, 2026 | 18:46 PM</div>
+        <div class="vitals-heartbeat-small">
+          <span class="vitals-label">AI Status:</span>
+          <span class="vitals-badge">Online</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Panel -->
+    <main class="content-container">
+
+      <!-- Screen 2: Dashboard Content -->
+      <section id="content-dashboard" class="content-section">
+        <!-- Dashboard Summary Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-value">148</span>
+              <span class="metric-label">Simulations Evaluated</span>
+            </div>
+            <div class="metric-trend positive">+12% this week</div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-value">84.5%</span>
+              <span class="metric-label">Average Compliance</span>
+            </div>
+            <div class="metric-trend positive">+1.8% vs last month</div>
+          </div>
+          
+          <div class="metric-card attention">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-value">3</span>
+              <span class="metric-label">Awaiting Instructor Review</span>
+            </div>
+            <div class="metric-trend warning">Action Required</div>
+          </div>
+          
+          <div class="metric-card">
+            <div class="metric-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div class="metric-data">
+              <span class="metric-value">42</span>
+              <span class="metric-label">Active Enrolled Candidates</span>
+            </div>
+            <div class="metric-trend neutral">Steady cohort size</div>
+          </div>
+        </div>
+
+        <!-- Dashboard Table / Awaiting Review Simulations -->
+        <div class="dashboard-table-container">
+          <div class="table-header">
+            <h3>Simulation Assessments Awaiting Instructor Approval</h3>
+            <span class="table-badge">3 Pending</span>
+          </div>
+          
+          <table class="dashboard-table">
+            <thead>
+              <tr>
+                <th>Student Candidate</th>
+                <th>Clinical Framework</th>
+                <th>Submission Date</th>
+                <th>AI Compliance Score</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="student-name-cell">
+                    <div class="avatar-sm">MC</div>
+                    <span>Marcus Chen</span>
+                  </div>
+                </td>
+                <td><span class="framework-tag primary-tag">Adult Cardiac Arrest (CPR)</span></td>
+                <td>June 14, 2026</td>
+                <td>
+                  <div class="score-indicator text-amber">
+                    <span class="score-badge badge-amber">82%</span>
+                    <span class="score-subtext">Minor protocol deviations</span>
+                  </div>
+                </td>
+                <td><span class="status-badge awaiting">Awaiting Review</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline btn-review" data-student="Marcus Chen" data-scenario="Adult Cardiac Arrest (CPR)">Review</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="student-name-cell">
+                    <div class="avatar-sm">ER</div>
+                    <span>Elena Rostova</span>
+                  </div>
+                </td>
+                <td><span class="framework-tag info-tag">Pediatric Seizure Management</span></td>
+                <td>June 13, 2026</td>
+                <td>
+                  <div class="score-indicator text-emerald">
+                    <span class="score-badge badge-emerald">88%</span>
+                    <span class="score-subtext">High protocol adherence</span>
+                  </div>
+                </td>
+                <td><span class="status-badge awaiting">Awaiting Review</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline btn-review" data-student="Elena Rostova" data-scenario="Pediatric Seizure Management">Review</button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="student-name-cell">
+                    <div class="avatar-sm">DK</div>
+                    <span>David Kim</span>
+                  </div>
+                </td>
+                <td><span class="framework-tag warning-tag">Trauma Primary Survey</span></td>
+                <td>June 12, 2026</td>
+                <td>
+                  <div class="score-indicator text-rose">
+                    <span class="score-badge badge-rose">76%</span>
+                    <span class="score-subtext">Critical guideline misses</span>
+                  </div>
+                </td>
+                <td><span class="status-badge awaiting">Awaiting Review</span></td>
+                <td>
+                  <button class="btn btn-sm btn-outline btn-review" data-student="David Kim" data-scenario="Trauma Primary Survey">Review</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Screen 3: Assessment Library Content -->
+      <section id="content-library" class="content-section hidden">
+        <div class="library-header-bar">
+          <p class="section-description">Select a clinical assessment framework to evaluate a simulator recording and generate an evaluation report.</p>
+        </div>
+        
+        <div class="library-grid">
+          <!-- Card 1: Cardiac Arrest (Primary) -->
+          <div class="library-card primary-card">
+            <div class="card-status-badge">AHA 2020 Guidelines</div>
+            <div class="library-card-body">
+              <div class="card-icon-container bg-emerald-light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+              </div>
+              <h3 class="library-card-title">Adult Cardiac Arrest (CPR)</h3>
+              <p class="library-card-desc">Evaluates cardiopulmonary resuscitation protocol, compressions (rate/depth/recoil), bag-valve ventilation ratio, and early biphasic defibrillation cycles.</p>
+              
+              <div class="card-metadata">
+                <div class="meta-item">
+                  <span class="meta-label">Domain:</span>
+                  <span class="meta-val">Emergency Medicine</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Difficulty:</span>
+                  <span class="meta-val text-rose-strong">Advanced</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Time Limit:</span>
+                  <span class="meta-val">10 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="library-card-footer">
+              <button class="btn btn-primary btn-block" id="btn-start-cpr-assessment">Analyze Assessment</button>
+            </div>
+          </div>
+          
+          <!-- Card 2 -->
+          <div class="library-card">
+            <div class="card-status-badge">AAP/PALS 2021</div>
+            <div class="library-card-body">
+              <div class="card-icon-container bg-blue-light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              </div>
+              <h3 class="library-card-title">Pediatric Seizure Management</h3>
+              <p class="library-card-desc">Evaluates identification of Status Epilepticus, timing of primary benzodiazepine doses, oxygenation, and EEG/lab request protocols.</p>
+              
+              <div class="card-metadata">
+                <div class="meta-item">
+                  <span class="meta-label">Domain:</span>
+                  <span class="meta-val">Pediatrics</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Difficulty:</span>
+                  <span class="meta-val text-amber-strong">Intermediate</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Time Limit:</span>
+                  <span class="meta-val">8 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="library-card-footer">
+              <button class="btn btn-outline btn-block disabled-btn">Analyze Assessment</button>
+            </div>
+          </div>
+          
+          <!-- Card 3 -->
+          <div class="library-card">
+            <div class="card-status-badge">ATLS 10th Ed</div>
+            <div class="library-card-body">
+              <div class="card-icon-container bg-rose-light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5zM12 21a9 9 0 0 1-9-9 9 9 0 0 1 9-9v18z"></path></svg>
+              </div>
+              <h3 class="library-card-title">Trauma Primary Survey</h3>
+              <p class="library-card-desc">Evaluates compliance with the ABCDE sequence: Airway maintenance with cervical spine protection, Breathing, Circulation control, Disability, Exposure.</p>
+              
+              <div class="card-metadata">
+                <div class="meta-item">
+                  <span class="meta-label">Domain:</span>
+                  <span class="meta-val">Trauma / Surgery</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Difficulty:</span>
+                  <span class="meta-val text-rose-strong">Advanced</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Time Limit:</span>
+                  <span class="meta-val">15 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="library-card-footer">
+              <button class="btn btn-outline btn-block disabled-btn">Analyze Assessment</button>
+            </div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="library-card">
+            <div class="card-status-badge">ACOG Guidelines</div>
+            <div class="library-card-body">
+              <div class="card-icon-container bg-purple-light">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 0-10 10c0 5.523 4.477 10 10 10s10-4.477 10-10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              </div>
+              <h3 class="library-card-title">Post-Operative Hemorrhage</h3>
+              <p class="library-card-desc">Evaluates detection of severe bleeding, quantification of blood loss (QBL), timing of uterotonic administration, and escalating surgical triggers.</p>
+              
+              <div class="card-metadata">
+                <div class="meta-item">
+                  <span class="meta-label">Domain:</span>
+                  <span class="meta-val">Obstetrics / OBGYN</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Difficulty:</span>
+                  <span class="meta-val text-amber-strong">Intermediate</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Time Limit:</span>
+                  <span class="meta-val">12 min</span>
+                </div>
+              </div>
+            </div>
+            <div class="library-card-footer">
+              <button class="btn btn-outline btn-block disabled-btn">Analyze Assessment</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 4: New Assessment Setup Content -->
+      <section id="content-new-assessment" class="content-section hidden">
+        <div class="new-assessment-container">
+          <div class="setup-layout">
+            <!-- Left Side: Upload Areas -->
+            <div class="evidence-column">
+              <h3>Simulation Evidence Upload</h3>
+              
+              <!-- Video Upload Panel -->
+              <div class="upload-box" id="drop-zone-video">
+                <input type="file" id="input-video-file" class="file-input" accept="video/*">
+                <div class="upload-default-state" id="video-state-default">
+                  <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+                  <p class="upload-instruction">Drag and drop simulation session <strong>video</strong> here, or <span class="upload-link">browse files</span></p>
+                  <p class="upload-limits">Supports MP4, MOV (Max 500MB)</p>
+                  <button type="button" class="btn btn-xs btn-outline-alt" id="btn-load-demo-video">Load Demo Video</button>
+                </div>
+                
+                <div class="upload-progress-state hidden" id="video-state-progress">
+                  <div class="progress-details">
+                    <span class="file-name" id="video-file-name">cpr_session_run_4.mp4</span>
+                    <span class="progress-pct" id="video-progress-pct">0%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="video-progress-bar"></div>
+                  </div>
+                  <span class="progress-speed">Uploading to secure HL7-compliant storage...</span>
+                </div>
+                
+                <div class="upload-complete-state hidden" id="video-state-complete">
+                  <svg class="complete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <p class="complete-title">Video Upload Complete</p>
+                  <p class="complete-details" id="video-complete-details">cpr_session_run_4.mp4 (145.2 MB)</p>
+                  <button type="button" class="btn btn-xs btn-link" id="btn-clear-video">Remove file</button>
+                </div>
+              </div>
+
+              <!-- Audio/Transcript Upload Panel -->
+              <div class="upload-box" id="drop-zone-transcript">
+                <input type="file" id="input-transcript-file" class="file-input" accept=".txt,.vtt,.srt">
+                <div class="upload-default-state" id="transcript-state-default">
+                  <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  <p class="upload-instruction">Drag and drop audio <strong>transcript</strong> here, or <span class="upload-link">browse files</span></p>
+                  <p class="upload-limits">Supports TXT, VTT, SRT (Max 10MB)</p>
+                  <button type="button" class="btn btn-xs btn-outline-alt" id="btn-load-demo-transcript">Load Demo Transcript</button>
+                </div>
+
+                <div class="upload-progress-state hidden" id="transcript-state-progress">
+                  <div class="progress-details">
+                    <span class="file-name" id="transcript-file-name">cpr_session_run_4.vtt</span>
+                    <span class="progress-pct" id="transcript-progress-pct">0%</span>
+                  </div>
+                  <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="transcript-progress-bar"></div>
+                  </div>
+                  <span class="progress-speed">Uploading transcript data...</span>
+                </div>
+
+                <div class="upload-complete-state hidden" id="transcript-state-complete">
+                  <svg class="complete-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  <p class="complete-title">Transcript Upload Complete</p>
+                  <p class="complete-details" id="transcript-complete-details">cpr_session_run_4.vtt (24 KB)</p>
+                  <button type="button" class="btn btn-xs btn-link" id="btn-clear-transcript">Remove file</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right Side: Parameters -->
+            <div class="parameters-column">
+              <h3>Simulation Settings</h3>
+              
+              <div class="parameter-card">
+                <div class="parameter-group">
+                  <label for="select-student">Select Student Candidate</label>
+                  <p class="field-desc">The student who led the simulation team as team leader.</p>
+                  <select id="select-student">
+                    <option value="Marcus Chen" selected>Marcus Chen (M3 Candidate)</option>
+                    <option value="Elena Rostova">Elena Rostova (M4 Candidate)</option>
+                    <option value="David Kim">David Kim (M2 Candidate)</option>
+                    <option value="Sarah Jenkins">Sarah Jenkins (PGY-1 Resident)</option>
+                  </select>
+                </div>
+                
+                <div class="parameter-group">
+                  <label>Selected Clinical Framework</label>
+                  <div class="static-framework-field">
+                    <strong>Adult Cardiac Arrest (CPR)</strong>
+                    <span>AHA ACLS 2020 Guidelines</span>
+                  </div>
+                </div>
+
+                <div class="parameter-group">
+                  <label for="select-room">Simulation Center Room / Manikin</label>
+                  <select id="select-room">
+                    <option value="room-3">Room 302 - High-Fidelity Adult Manikin (SimMan 3G)</option>
+                    <option value="room-1">Room 101 - Basic Life Support Trainer</option>
+                    <option value="ER-bay">ER Resus Bay A - Mobile Simulation Kit</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="actions-panel">
+                <button id="btn-run-ai-assessment" class="btn btn-primary btn-block btn-lg" disabled>
+                  Run AI Assessment
+                </button>
+                <p class="disclaimer-text">Requires both video simulation and transcript uploads to execute clinical pattern analysis.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 5: AI Review workspace -->
+      <section id="content-ai-review" class="content-section hidden">
+        <div class="review-layout">
+          <!-- Left Column: Video and Timeline -->
+          <div class="review-left">
+            <!-- Simulated Video Player -->
+            <div class="video-container-card">
+              <div class="video-player-header">
+                <div class="player-title">cpr_session_run_4.mp4 (Simulated Vitals Monitor Feed)</div>
+                <div class="player-timestamp" id="monitor-timestamp">00:00</div>
+              </div>
+              
+              <div class="video-player-body">
+                <!-- Scrolling Patient Vitals Monitor Canvas -->
+                <canvas id="patient-monitor-canvas" width="640" height="300"></canvas>
+                
+                <!-- Monitor Vitals Sidebar Panel -->
+                <div class="monitor-vitals-overlay">
+                  <div class="vital-stat hr-stat">
+                    <span class="v-label">HR</span>
+                    <span class="v-value" id="monitor-hr">--</span>
+                    <span class="v-unit">bpm</span>
+                  </div>
+                  <div class="vital-stat bp-stat">
+                    <span class="v-label">NIBP</span>
+                    <span class="v-value" id="monitor-bp">--/--</span>
+                    <span class="v-unit">mmHg</span>
+                  </div>
+                  <div class="vital-stat spo2-stat">
+                    <span class="v-label">SpO2</span>
+                    <span class="v-value" id="monitor-spo2">--</span>
+                    <span class="v-unit">%</span>
+                  </div>
+                  <div class="vital-stat dynamic-ecg-rhythm">
+                    <span class="v-label">RHYTHM</span>
+                    <span class="v-value-small" id="monitor-rhythm">VENTRICULAR FIBRILLATION</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="video-controls-bar">
+                <button class="btn-player" id="btn-player-play" title="Play/Pause">
+                  <!-- Play Icon SVG -->
+                  <svg id="svg-play" class="control-svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21"></polygon></svg>
+                  <!-- Pause Icon SVG -->
+                  <svg id="svg-pause" class="control-svg hidden" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                </button>
+                <div class="player-progress-container" id="player-progress-container">
+                  <div class="player-progress-bar" id="player-progress-bar"></div>
+                </div>
+                <span class="player-time-display"><span id="time-curr">00:00</span> / <span id="time-dur">03:30</span></span>
+              </div>
+            </div>
+
+            <!-- Chronological Timeline of AI Findings -->
+            <div class="findings-timeline-card">
+              <div class="card-header">
+                <h3>Chronological AI Findings</h3>
+                <span class="header-desc">Click an event to show rationale & guidelines</span>
+              </div>
+              <div class="findings-list-container">
+                <div class="timeline-line"></div>
+                <div class="findings-list" id="findings-list">
+                  <!-- Timeline items populated dynamically by JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Compliance & Guidelines & Overrides -->
+          <div class="review-right">
+            <!-- Score & Circular Compliance Gauge -->
+            <div class="compliance-overview-card">
+              <h3>Protocol Compliance</h3>
+              <div class="compliance-circle-container">
+                <svg class="compliance-ring" viewBox="0 0 100 100">
+                  <circle class="ring-bg" cx="50" cy="50" r="40" />
+                  <circle class="ring-fill" id="compliance-ring-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="45.2" /> <!-- (1 - 0.82) * 251.2 = 45.2 -->
+                </svg>
+                <div class="compliance-percent" id="compliance-percentage-text">82%</div>
+                <div class="compliance-sublabel">AHA Guidelines Met</div>
+              </div>
+              
+              <!-- Checklist of Specific Framework Guideline Steps -->
+              <div class="guideline-checklist">
+                <h4>Guideline Checklist Verification</h4>
+                <ul class="checklist-items" id="guideline-checklist-items">
+                  <!-- Populated by JS -->
+                </ul>
+              </div>
+            </div>
+
+            <!-- Explainability and Reference Panel -->
+            <div class="explainability-card">
+              <div class="card-header">
+                <h3>AI Explainability Panel</h3>
+              </div>
+              <div class="explainability-content" id="explainability-panel-content">
+                <div class="explain-empty-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                  <p>Click any timeline event to review the clinical reasoning, guideline citations, and transcript references.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Instructor Decision Overrides -->
+            <div class="instructor-controls-card">
+              <h3>Instructor Review & Certification</h3>
+              <p class="control-desc">Verify AI findings. You can override individual compliance items in the checklist above, or write comments below.</p>
+              
+              <div class="input-group">
+                <label for="instructor-feedback">Assessor Clinical Feedback</label>
+                <textarea id="instructor-feedback" placeholder="Add clinical guidance for the student. This will appear on the final report card.">Overall solid team leadership and command of the room. Compressions were at the correct rate. However, the interruption in chest compressions during defibrillator preparation exceeded the 10-second limit. We must coordinate pads prep and charging while compressions are running.</textarea>
+              </div>
+
+              <div class="approval-actions">
+                <button class="btn btn-outline" id="btn-reanalyze">Reset Review</button>
+                <button class="btn btn-primary" id="btn-approve-certify">Approve & Certify</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screen 6: Final Assessment Report Content -->
+      <section id="content-report" class="content-section hidden">
+        <div class="report-workspace">
+          
+          <!-- Document Actions Side Panel (Don't show in Print) -->
+          <div class="report-actions-panel no-print">
+            <h3>Assessment Certified</h3>
+            <p class="cert-status-desc">This simulation report has been reviewed, certified, and timestamped by the clinical instructor.</p>
+            
+            <div class="cert-meta-info">
+              <div class="meta-row">
+                <span>Certification Code</span>
+                <strong id="report-cert-code">SAC-2026-9812</strong>
+              </div>
+              <div class="meta-row">
+                <span>Date Certified</span>
+                <strong id="report-cert-date">June 14, 2026</strong>
+              </div>
+            </div>
+
+            <div class="action-buttons-group">
+              <button class="btn btn-primary btn-block btn-lg" id="btn-print-pdf">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                Download PDF
+              </button>
+              <button class="btn btn-outline btn-block btn-lg" id="btn-share-student">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                Share with Student
+              </button>
+            </div>
+            
+            <button class="btn btn-link btn-block" id="btn-return-dashboard">Return to Dashboard</button>
+          </div>
+
+          <!-- Printable PDF Document Frame -->
+          <div class="printable-report-card" id="printable-report-area">
+            
+            <!-- Document Header -->
+            <div class="report-doc-header">
+              <div class="doc-header-left">
+                <div class="doc-logo">
+                  <svg class="logo-icon-dark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 10.5V13.5M19 10.5C20.3807 10.5 21.5 11.6193 21.5 13C21.5 14.3807 20.3807 15.5 19 15.5M19 10.5C17.6193 10.5 16.5 11.6193 16.5 13C16.5 14.3807 17.6193 15.5 19 15.5M19 15.5V18.5M12 3V21M12 3C13.3807 3 14.5 4.11929 14.5 5.5C14.5 6.88071 13.3807 8 12 8M12 3C10.6193 3 9.5 4.11929 9.5 5.5C9.5 6.88071 10.6193 8 12 8M12 8V16M12 16C13.3807 16 14.5 17.1193 14.5 18.5C14.5 19.8807 13.3807 21 12 21M12 16C10.6193 16 9.5 17.1193 9.5 18.5C9.5 19.8807 10.6193 21 12 21M5 7.5V10.5M5 7.5C6.38071 7.5 7.5 8.61929 7.5 10C7.5 11.3807 6.38071 12.5 5 12.5M5 7.5C3.61929 7.5 2.5 8.61929 2.5 10C2.5 11.3807 3.61929 12.5 5 12.5M5 12.5V15.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  <span>SimAssess <span class="brand-badge-dark">Pro</span></span>
+                </div>
+                <h2>Clinical Evaluation Feedback Report</h2>
+                <p class="guideline-reference-subtitle">AHA ACLS 2020 Guidelines &middot; Cardiac Arrest Protocol</p>
+              </div>
+              <div class="doc-header-right">
+                <div class="certified-stamp">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 11l3 3 5-5"></path></svg>
+                  <span>CERTIFIED</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Student Metadata Row -->
+            <div class="report-meta-grid">
+              <div class="meta-field">
+                <span class="field-label">STUDENT CANDIDATE</span>
+                <span class="field-value" id="report-val-student">Marcus Chen</span>
+              </div>
+              <div class="meta-field">
+                <span class="field-label">SCENARIO</span>
+                <span class="field-value">Adult Cardiac Arrest (CPR)</span>
+              </div>
+              <div class="meta-field">
+                <span class="field-label">CLINICAL INSTRUCTOR</span>
+                <span class="field-value">Dr. Sarah Jenkins</span>
+              </div>
+              <div class="meta-field">
+                <span class="field-label">DATE EVALUATED</span>
+                <span class="field-value" id="report-val-date">June 14, 2026</span>
+              </div>
+            </div>
+
+            <div class="score-breakdown-row">
+              <!-- Score Badge -->
+              <div class="overall-score-panel">
+                <span class="panel-label">OVERALL GRADED SCORE</span>
+                <div class="score-display">
+                  <span class="score-numerator" id="report-overall-score">85</span>
+                  <span class="score-slash">/</span>
+                  <span class="score-denominator">100</span>
+                </div>
+                <span class="pass-fail-badge pass">PASS - CERTIFIED</span>
+              </div>
+              
+              <!-- Mini Checklist Status -->
+              <div class="checklist-summary-panel">
+                <span class="panel-label">PROTOCOL COMPLIANCE BREAKDOWN</span>
+                <div class="summary-bars" id="report-summary-bars">
+                  <!-- Populated by JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Strengths and Weaknesses -->
+            <div class="strengths-weaknesses-section">
+              <div class="sw-column strength-col">
+                <h4 class="sw-title text-emerald-strong">
+                  <svg class="sw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                  Observed Strengths
+                </h4>
+                <ul class="sw-list" id="report-strengths-list">
+                  <li>Rapid initial recognition of cardiac arrest and pulse check performed within 10s.</li>
+                  <li>Exceptional chest compression rate, averaging 112 compressions per minute.</li>
+                  <li>Effective team leadership and clear closed-loop communication commands.</li>
+                </ul>
+              </div>
+
+              <div class="sw-column weakness-col">
+                <h4 class="sw-title text-rose-strong">
+                  <svg class="sw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  Protocol Deviations / Area for Growth
+                </h4>
+                <ul class="sw-list" id="report-weaknesses-list">
+                  <li><strong>Delay in CPR restart:</strong> Pause in chest compressions during defibrillator charging cycle was 14s (Guideline threshold: &lt; 10s).</li>
+                  <li><strong>Ventilation over-volume:</strong> 2 bag-valve ventilations exceeded the target tidal volume (visible hyperinflation).</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Actionable Coaching Recommendations -->
+            <div class="coaching-section">
+              <h4>Actionable Coaching Recommendations</h4>
+              <ol class="coaching-list" id="report-coaching-list">
+                <li>Practice defibrillator pad pre-charging while chest compressions are actively occurring. Do not stop compressions while the unit charges; compressions should only halt for rhythm check and shock delivery.</li>
+                <li>Conduct BVM ventilation practice on a volume-feedback trainer to gain muscle memory for appropriate chest rise without hyperventilating the patient.</li>
+              </ol>
+            </div>
+
+            <!-- Assessor Comments Block -->
+            <div class="assessor-comments-section">
+              <h4>Assessor Final Comments</h4>
+              <p class="assessor-comments-text" id="report-comments-text">
+                Overall solid team leadership and command of the room. Compressions were at the correct rate. However, the interruption in chest compressions during defibrillator preparation exceeded the 10-second limit. We must coordinate pads prep and charging while compressions are running.
+              </p>
+            </div>
+
+            <!-- Report Footer Signature Sign-off -->
+            <div class="report-signature-block">
+              <div class="signature-line">
+                <div class="sig-image">Dr. Sarah Jenkins, MD</div>
+                <div class="sig-name">Dr. Sarah Jenkins, MD</div>
+                <div class="sig-title">Director of Clinical Simulation</div>
+              </div>
+              <div class="timestamp-stamp">
+                <span>Verified SHA-256 Hash</span>
+                <code>9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Shared Overlay Modal for Student Share -->
+  <div class="modal-overlay hidden" id="share-modal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Share Assessment Report</h3>
+        <button class="btn-close-modal" id="btn-close-share-modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label for="share-student-email">Student Email Address</label>
+          <input type="email" id="share-student-email" value="m.chen@medicalschool.edu">
+        </div>
+        <div class="input-group">
+          <label for="share-email-subject">Subject</label>
+          <input type="text" id="share-email-subject" value="SimAssess Pro Graded Certificate: Adult Cardiac Arrest (CPR)">
+        </div>
+        <div class="input-group">
+          <label for="share-email-body">Message</label>
+          <textarea id="share-email-body" rows="4">Hi Marcus, 
+
+Your clinical simulation assessment for the "Adult Cardiac Arrest (CPR)" framework has been reviewed and certified by Dr. Sarah Jenkins. 
+
+You scored 85/100 (Pass). You can log into your student portal to see the full timeline, video audit details, and coaching recommendations.
+
+Regards,
+Simulation Center Office</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-cancel-share">Cancel</button>
+        <button class="btn btn-primary" id="btn-send-share">
+          <span class="btn-text">Send Email Notification</span>
+          <div class="spinner hidden"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Simulated AI Analysis Modal Overlay -->
+  <div class="modal-overlay hidden" id="ai-processing-overlay">
+    <div class="processing-card">
+      <div class="vitals-wave-container">
+        <svg class="vitals-wave" viewBox="0 0 200 60">
+          <path class="wave-path" d="M0,30 L60,30 L65,10 L70,50 L75,30 L80,30 L85,25 L90,35 L95,30 L200,30" />
+        </svg>
+      </div>
+      
+      <h2>Analyzing Clinical Evidence</h2>
+      <p class="processing-sub">AI pattern extraction engine parsing uploaded data files...</p>
+      
+      <div class="steps-progress-list">
+        <div class="progress-step-item" id="ai-step-1">
+          <div class="step-bullet"><div class="spinner-sm"></div></div>
+          <span class="step-text">Parsing simulation video feed & timestamps...</span>
+        </div>
+        <div class="progress-step-item" id="ai-step-2">
+          <div class="step-bullet-dot"></div>
+          <span class="step-text">Aligning dialogue transcript with guideline tags...</span>
+        </div>
+        <div class="progress-step-item" id="ai-step-3">
+          <div class="step-bullet-dot"></div>
+          <span class="step-text">Evaluating compression metrics & CPR cycles...</span>
+        </div>
+        <div class="progress-step-item" id="ai-step-4">
+          <div class="step-bullet-dot"></div>
+          <span class="step-text">Generating protocol compliance rating...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Application JS Code -->
+  <script src="app.js"></script>
+</body>
+</html>

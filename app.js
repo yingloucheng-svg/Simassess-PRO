@@ -152,7 +152,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const navItems = {
     dashboard: document.getElementById("nav-dashboard"),
-    library: document.getElementById("nav-library")
+    assessments: document.getElementById("nav-assessments"),
+    simulations: document.getElementById("nav-simulations"),
+    reports: document.getElementById("nav-reports")
+  };
+
+  const reportViews = {
+    listView: document.getElementById("report-list-view"),
+    detailView: document.getElementById("report-detail-view")
   };
 
   // ==========================================================================
@@ -189,13 +196,15 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (screenId === "screen-library") {
         screens.library.classList.remove("hidden");
         screens.library.classList.add("active-screen");
-        navItems.library.classList.add("active");
+        navItems.assessments.classList.add("active");
       } else if (screenId === "screen-new-assessment") {
         screens.newAssessment.classList.remove("hidden");
         screens.newAssessment.classList.add("active-screen");
+        navItems.assessments.classList.add("active");
       } else if (screenId === "screen-ai-review") {
         screens.aiReview.classList.remove("hidden");
         screens.aiReview.classList.add("active-screen");
+        navItems.simulations.classList.add("active");
         initMonitorCanvas();
         resetMonitor();
         populateAIReviewTimeline();
@@ -203,7 +212,17 @@ document.addEventListener("DOMContentLoaded", () => {
       } else if (screenId === "screen-report") {
         screens.report.classList.remove("hidden");
         screens.report.classList.add("active-screen");
-        populateFinalReport();
+        navItems.reports.classList.add("active");
+        
+        if (state.openReportInDetail) {
+          reportViews.listView.classList.add("hidden");
+          reportViews.detailView.classList.remove("hidden");
+          populateFinalReport(state.openReportInDetail);
+        } else {
+          reportViews.listView.classList.remove("hidden");
+          reportViews.detailView.classList.add("hidden");
+          renderReportsList();
+        }
       }
       
       document.getElementById("header-page-title").textContent = pageTitle;
@@ -278,7 +297,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".btn-review").forEach(btn => {
     btn.addEventListener("click", (e) => {
       state.activeStudent = e.target.getAttribute("data-student");
-      showScreen("screen-library", "Assessment Frameworks Library");
+      // Route directly to Simulations (screen-ai-review)
+      showScreen("screen-ai-review", `Simulation Review: ${state.activeStudent}`);
     });
   });
 
@@ -288,9 +308,20 @@ document.addEventListener("DOMContentLoaded", () => {
     showScreen("screen-dashboard", "Assessor Dashboard");
   });
 
-  navItems.library.addEventListener("click", (e) => {
+  navItems.assessments.addEventListener("click", (e) => {
     e.preventDefault();
-    showScreen("screen-library", "Assessment Frameworks Library");
+    showScreen("screen-library", "Assessment Frameworks");
+  });
+
+  navItems.simulations.addEventListener("click", (e) => {
+    e.preventDefault();
+    showScreen("screen-ai-review", `Simulation Review: ${state.activeStudent}`);
+  });
+
+  navItems.reports.addEventListener("click", (e) => {
+    e.preventDefault();
+    state.openReportInDetail = null; // show reports list view
+    showScreen("screen-report", "Certified Reports");
   });
 
   // ==========================================================================
@@ -488,7 +519,7 @@ document.addEventListener("DOMContentLoaded", () => {
             // Finish analysis and load AI Review Screen
             setTimeout(() => {
               aiOverlay.classList.add("hidden");
-              showScreen("screen-ai-review", `AI Clinical Audit: ${state.activeStudent}`);
+              showScreen("screen-ai-review", `Simulation Review: ${state.activeStudent}`);
             }, 600);
             
           }, 900);
@@ -663,7 +694,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Approve & Certify Button Action
   document.getElementById("btn-approve-certify").addEventListener("click", () => {
-    showScreen("screen-report", "Grades & Certification Report");
+    certifyCurrentSimulation();
     showToast("Simulation evaluation certified successfully.");
   });
 
@@ -936,24 +967,215 @@ document.addEventListener("DOMContentLoaded", () => {
   // Screen 6: Graded Assessment Report Card
   // ==========================================================================
 
-  function populateFinalReport() {
-    document.getElementById("report-val-student").textContent = state.activeStudent;
+  // ==========================================================================
+  // Screen 6: Graded Assessment Report Card & Certified Reports Storage
+  // ==========================================================================
+
+  let certifiedReports = [
+    {
+      code: "SAC-2026-9811",
+      date: "June 13, 2026",
+      student: "Elena Rostova",
+      scenario: "Pediatric Seizure Management",
+      framework: "AAP/PALS 2021 Guidelines",
+      score: 88,
+      compliance: 88,
+      comments: "Prompt identification of status epilepticus. Benzodiazepine administration was timed perfectly. Standard protocol followed with high compliance.",
+      checklist: [
+        { text: "Airway assessment & oxygenation", compliant: true },
+        { text: "IV/IO access established", compliant: true },
+        { text: "First benzo dose within 5m of seizure onset", compliant: true },
+        { text: "Check blood glucose levels", compliant: true },
+        { text: "Second benzo dose timed correctly", compliant: true },
+        { text: "Request EEG & pediatric neurology consult", compliant: true },
+        { text: "Continuous vitals monitoring", compliant: false }
+      ],
+      strengths: [
+        "Excellent communication and command of the seizure management protocol.",
+        "Timely request for diagnostic lab work and EEG monitoring."
+      ],
+      weaknesses: [
+        "Minor delay in starting continuous EEG lead setup."
+      ],
+      coaching: [
+        "Ensure continuous vitals monitoring is locked in immediately after first responder arrives."
+      ]
+    },
+    {
+      code: "SAC-2026-9810",
+      date: "June 12, 2026",
+      student: "David Kim",
+      scenario: "Trauma Primary Survey",
+      framework: "ATLS 10th Ed Guidelines",
+      score: 76,
+      compliance: 71,
+      comments: "Identified airway obstruction correctly. However, deviation from sequence order was noted: began breathing assessment before verifying complete C-spine stabilization.",
+      checklist: [
+        { text: "Airway maintenance with C-spine protection", compliant: false },
+        { text: "Breathing & ventilation evaluation", compliant: true },
+        { text: "Circulation control & hemorrhage management", compliant: true },
+        { text: "Disability (Neurological status)", compliant: true },
+        { text: "Exposure / Environmental control", compliant: false }
+      ],
+      strengths: [
+        "Correct identification of tension pneumothorax.",
+        "Effective needle decompression execution."
+      ],
+      weaknesses: [
+        "C-spine restriction was released prematurely by the second responder without team leader noticing."
+      ],
+      coaching: [
+        "Review trauma team leader roles and emphasize constant verification of cervical spine restriction."
+      ]
+    }
+  ];
+
+  function renderReportsList() {
+    const tbody = document.getElementById("reports-list-tbody");
+    const countBadge = document.getElementById("reports-count-badge");
     
-    // Generate certified timestamp
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    
+    if (countBadge) {
+      countBadge.textContent = `${certifiedReports.length} ${certifiedReports.length === 1 ? 'Report' : 'Reports'}`;
+    }
+    
+    certifiedReports.forEach((report) => {
+      const row = document.createElement("tr");
+      row.style.cursor = "pointer";
+      
+      const initials = report.student.split(" ").map(n => n[0]).join("");
+      
+      let scoreColor = "text-emerald";
+      let scoreBadge = "badge-emerald";
+      if (report.score < 80) {
+        scoreColor = "text-rose";
+        scoreBadge = "badge-rose";
+      } else if (report.score < 90) {
+        scoreColor = "text-amber";
+        scoreBadge = "badge-amber";
+      }
+      
+      row.innerHTML = `
+        <td>
+          <div class="student-name-cell">
+            <div class="avatar-sm">${initials}</div>
+            <span>${report.student}</span>
+          </div>
+        </td>
+        <td><span class="framework-tag info-tag">${report.scenario}</span></td>
+        <td>${report.date}</td>
+        <td>
+          <div class="score-indicator ${scoreColor}">
+            <span class="score-badge ${scoreBadge}">${report.score}%</span>
+          </div>
+        </td>
+        <td><span class="status-badge" style="background-color: var(--emerald-50); color: var(--emerald-700); border: 1px solid var(--emerald-100); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.3px;">Certified</span></td>
+        <td>
+          <button class="btn btn-sm btn-outline btn-view-report" data-code="${report.code}">View Report</button>
+        </td>
+      `;
+      
+      const openReport = (e) => {
+        e.stopPropagation();
+        state.openReportInDetail = report;
+        showScreen("screen-report", "Grades & Certification Report");
+      };
+      
+      row.addEventListener("click", openReport);
+      row.querySelector(".btn-view-report").addEventListener("click", openReport);
+      
+      tbody.appendChild(row);
+    });
+  }
+
+  function certifyCurrentSimulation() {
     const today = new Date();
     const formattedDate = today.toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' });
-    document.getElementById("report-val-date").textContent = formattedDate;
-    document.getElementById("report-cert-date").textContent = formattedDate;
+    const randomCode = "SAC-2026-" + Math.floor(1000 + Math.random() * 9000);
+    const reportScore = Math.max(50, Math.min(100, Math.round(state.compliancePercentage * 0.9 + 11.2)));
     
-    // Update Score outputs
-    const reportScore = Math.max(50, Math.min(100, Math.round(state.compliancePercentage * 0.9 + 11.2))); // scale slightly
-    document.getElementById("report-overall-score").textContent = reportScore;
+    let scenario = "Adult Cardiac Arrest (CPR)";
+    let framework = "AHA ACLS 2020 Guidelines";
+    if (state.activeStudent === "Elena Rostova") {
+      scenario = "Pediatric Seizure Management";
+      framework = "AAP/PALS 2021 Guidelines";
+    } else if (state.activeStudent === "David Kim") {
+      scenario = "Trauma Primary Survey";
+      framework = "ATLS 10th Ed Guidelines";
+    }
+
+    const commentsArea = document.getElementById("instructor-feedback");
+    const currentChecklist = checklistItems.map(c => ({
+      text: c.text,
+      compliant: c.compliant
+    }));
+
+    let strengths = [
+      "Rapid initial recognition of patient state.",
+      "Effective team leadership and clear closed-loop communication commands."
+    ];
+    let weaknesses = [];
+    let coaching = [];
+
+    if (checklistItems[5] && checklistItems[5].compliant) {
+      weaknesses.push("Ventilation volume exceeded target tidal volume (minor hyperinflation).");
+      coaching.push("Practice ventilation delivery on a volume-feedback clinical trainer to establish muscle memory.");
+    } else {
+      weaknesses.push("Pause in chest compressions during defibrillator charging cycle exceeded guideline thresholds.");
+      coaching.push("Practice defibrillator pad pre-charging while chest compressions are actively occurring.");
+    }
+
+    const newReport = {
+      code: randomCode,
+      date: formattedDate,
+      student: state.activeStudent,
+      scenario: scenario,
+      framework: framework,
+      score: reportScore,
+      compliance: state.compliancePercentage,
+      comments: commentsArea.value || "No feedback comments entered.",
+      checklist: currentChecklist,
+      strengths: strengths,
+      weaknesses: weaknesses,
+      coaching: coaching
+    };
+
+    certifiedReports = certifiedReports.filter(r => !(r.student === newReport.student && r.scenario === newReport.scenario));
+    certifiedReports.unshift(newReport);
     
-    // Score Badge Pass/Fail Status
+    state.openReportInDetail = newReport;
+    showScreen("screen-report", "Grades & Certification Report");
+  }
+
+  function populateFinalReport(report) {
+    if (!report) {
+      if (certifiedReports.length > 0) {
+        report = certifiedReports[0];
+      } else {
+        return;
+      }
+    }
+    
+    document.getElementById("report-val-student").textContent = report.student;
+    document.getElementById("report-val-date").textContent = report.date;
+    document.getElementById("report-cert-date").textContent = report.date;
+    document.getElementById("report-cert-code").textContent = report.code;
+    document.getElementById("report-overall-score").textContent = report.score;
+    
+    const subtitleEl = document.querySelector(".guideline-reference-subtitle");
+    if (subtitleEl) {
+      subtitleEl.innerHTML = `${report.framework} &middot; ${report.scenario}`;
+    }
+
     const passFailEl = document.querySelector(".pass-fail-badge");
-    if (reportScore >= 80) {
+    if (report.score >= 80) {
       passFailEl.className = "pass-fail-badge pass";
       passFailEl.textContent = "PASS - CERTIFIED";
+      passFailEl.style.backgroundColor = "";
+      passFailEl.style.color = "";
+      passFailEl.style.border = "";
     } else {
       passFailEl.className = "pass-fail-badge fail";
       passFailEl.textContent = "CRITICAL FAIL";
@@ -962,70 +1184,80 @@ document.addEventListener("DOMContentLoaded", () => {
       passFailEl.style.border = "1px solid var(--rose-100)";
     }
 
-    // Update Graded Categories Progress bars
     const barsContainer = document.getElementById("report-summary-bars");
     barsContainer.innerHTML = "";
     
-    // Scale categories dynamically depending on overall compliance
-    reportCategories.forEach((cat) => {
-      let finalCatScore = cat.score;
-      if (cat.name === "Defibrillation Protocol Compliance") {
-        finalCatScore = checklistItems[5].compliant ? 100 : 70; // index 5 is minimizing interruptions
-      }
-      
+    const categories = [
+      { name: "Recognition & Response Activation", score: report.score >= 80 ? 100 : 75 },
+      { name: "CPR Quality (Depth & Rate)", score: report.score >= 80 ? 95 : 85 },
+      { name: "Defibrillation Protocol Compliance", score: report.score >= 90 ? 100 : (report.score >= 80 ? 80 : 70) },
+      { name: "Pharmacotherapy Protocol Compliance", score: report.score >= 80 ? 100 : 80 },
+      { name: "Team Leadership & Comm Skills", score: report.score >= 80 ? 90 : 70 }
+    ];
+    
+    categories.forEach((cat) => {
       let barClass = "bar-emerald";
-      if (finalCatScore < 80) barClass = "bar-rose";
-      else if (finalCatScore < 95) barClass = "bar-amber";
+      if (cat.score < 80) barClass = "bar-rose";
+      else if (cat.score < 95) barClass = "bar-amber";
       
       const row = document.createElement("div");
       row.className = "summary-bar-row";
       row.innerHTML = `
         <span class="summary-row-label">${cat.name}</span>
         <div class="summary-bar-outer">
-          <div class="summary-bar-inner ${barClass}" style="width:${finalCatScore}%"></div>
+          <div class="summary-bar-inner ${barClass}" style="width:${cat.score}%"></div>
         </div>
-        <span class="summary-row-pct">${finalCatScore}%</span>
+        <span class="summary-row-pct">${cat.score}%</span>
       `;
       barsContainer.appendChild(row);
     });
 
-    // Populate strengths & weaknesses lists based on deviations status
     const strengthsList = document.getElementById("report-strengths-list");
     const weaknessesList = document.getElementById("report-weaknesses-list");
     const coachingList = document.getElementById("report-coaching-list");
 
+    strengthsList.innerHTML = "";
     weaknessesList.innerHTML = "";
     coachingList.innerHTML = "";
 
-    // If chest compressions minimize interruptions is marked compliant
-    if (checklistItems[5].compliant) {
-      weaknessesList.innerHTML = `
-        <li><strong>No critical protocol deviations:</strong> All ACLS compressions and ventilation intervals met guideline thresholds.</li>
-        <li><strong>Ventilation volume:</strong> 2 bag-valve ventilations exceeded the target tidal volume (minor hyperinflation noted).</li>
-      `;
-      coachingList.innerHTML = `
-        <li>Practice ventilation delivery on a volume-feedback clinical trainer to establish muscle memory for chest rise without exceeding target pressure limits.</li>
-        <li>Maintain current excellent standard for compression rate and defibrillator cycle timing.</li>
-      `;
-    } else {
-      weaknessesList.innerHTML = `
-        <li><strong>Delay in CPR restart:</strong> Pause in chest compressions during defibrillator charging cycle was 14s (AHA guideline threshold: &lt; 10s).</li>
-        <li><strong>Ventilation over-volume:</strong> 2 bag-valve ventilations exceeded the target tidal volume (visible hyperinflation).</li>
-      `;
-      coachingList.innerHTML = `
-        <li>Practice defibrillator pad pre-charging while chest compressions are actively occurring. Do not halt active compressions while the unit charges; compressions should only halt for rhythm check and shock delivery.</li>
-        <li>Conduct BVM ventilation practice on a volume-feedback trainer to gain muscle memory for appropriate chest rise without hyperventilating the patient.</li>
-      `;
+    report.strengths.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      strengthsList.appendChild(li);
+    });
+
+    report.weaknesses.forEach(w => {
+      const li = document.createElement("li");
+      li.innerHTML = w;
+      weaknessesList.appendChild(li);
+    });
+
+    if (coachingList) {
+      if (report.coaching && report.coaching.length > 0) {
+        report.coaching.forEach(c => {
+          const li = document.createElement("li");
+          li.textContent = c;
+          coachingList.appendChild(li);
+        });
+      } else {
+        const li = document.createElement("li");
+        li.textContent = "Continue review of clinical simulation guideline criteria.";
+        coachingList.appendChild(li);
+      }
     }
 
-    // Set comments
-    const commentsArea = document.getElementById("instructor-feedback");
-    document.getElementById("report-comments-text").textContent = commentsArea.value;
+    document.getElementById("report-comments-text").textContent = report.comments;
   }
 
   // Return to dashboard link
   document.getElementById("btn-return-dashboard").addEventListener("click", () => {
     showScreen("screen-dashboard", "Assessor Dashboard");
+  });
+
+  // Back to reports list link
+  document.getElementById("btn-back-reports-list").addEventListener("click", () => {
+    state.openReportInDetail = null;
+    showScreen("screen-report", "Certified Reports");
   });
 
   // ==========================================================================
